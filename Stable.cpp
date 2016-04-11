@@ -30,8 +30,10 @@
 //       I have given him a value of num+1. He is not stored
 //       in the women's ROL.
 #include<stdlib.h>
-#include<iostream.h>
-main()
+#include<iostream>
+using namespace std;
+
+int main()
 {
 int choices =0, num=0, n =1, i, j;
 cout<<"~~~~Welcome to the Marriage Algorithm Program~~~~"<<endl;
