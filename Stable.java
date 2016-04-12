@@ -52,7 +52,7 @@ class Stable {
               for (j = 0; j < num; j++) {
                   choices = in.nextInt();
 
-                  while (choices > num || choices < 0) {
+                  while (choices >= num || choices < 0) {
                     System.out.println("Please enter a valid choice for Man " + i + " between 0 and " + (num-1) + ": ");
                     choices = in.nextInt();
                   }
@@ -73,7 +73,7 @@ class Stable {
                 for (j = 0; j < num; j++) {
                     choices = in.nextInt();
 
-                    while (choices > num || choices < 0) {
+                    while (choices >= num || choices < 0) {
                       System.out.println("Please enter a valid choice for Woman " + i + " between 0 and " + (num-1) + ": ");
                       choices = in.nextInt();
                     }
@@ -99,6 +99,7 @@ class Stable {
       }
 
       while(couples < num) {
+
          man = couples;
          while (man != ugly_man) {
            // used later
@@ -114,7 +115,6 @@ class Stable {
 
             // index of woman on man's list
             for (i = 0; i <= num; i++) {
-                System.out.println("W: " + woman + ", " + "i: " + i);
                 if (women[woman][i]== man) {
                   index_m = i;
                 }
