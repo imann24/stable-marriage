@@ -2,12 +2,12 @@ import java.util.Scanner;
 
 class Stable {
 
-  public static void main (String[] argus) {
+  public static void main (String[] args) {
       Scanner in = new Scanner(System.in);
 
       // Create Input variables to hold number of men and women:
       int choices =0, num=0, n =1, i, j;
-
+      int [][] men = null, women = null;
       // Print a nice intro the user user
 
       System.out.println("~~~~Welcome to the Marriage Algorithm Program~~~~");
@@ -19,60 +19,67 @@ class Stable {
       System.out.println("3. Do not repeat a choice for the same man/woman");
       System.out.println("4. Complete each Rank ordered List (ROL)\n\n");
 
-      // Not sure what this five thing is about, probably worth looking into
-      // Read in the number of men/women
-      System.out.println("How many men/women ?");
-      num = in.nextInt();
-      while (num > 5) {
-         System.out.println("Please don't enter a number greater than 5");
-         System.out.println("Re-enter number:");
-         num = in.nextInt();
-      }
-
-
-      // Create two jagged arrays, one for men, one for women
-      int [][] men = new int[num][num+1];
-      int [][] women = new int[num][num+1];
-
-
-      //Read choices for men
-      System.out.println("Enter your choices for: ");
-      for (i = 0; i < num; i++) {
-
-          System.out.println("Man " + i + ": ");
-
-
-          for (j = 0; j < num; j++) {
-              choices = in.nextInt();
-
-              while (choices > num || choices < 0) {
-                System.out.println("Please enter a valid choice for Man " + i + " between 0 and " + (num-1) + ": ");
-                choices = in.nextInt();
-              }
-
-              men[i][j+1] = choices;
+       if(args.length == 0) {
+          // Not sure what this five thing is about, probably worth looking into
+          // Read in the number of men/women
+          System.out.println("How many men/women ?");
+          num = in.nextInt();
+          while (num > 5) {
+             System.out.println("Please don't enter a number greater than 5");
+             System.out.println("Re-enter number:");
+             num = in.nextInt();
           }
 
-        }
 
-      System.out.println("\n");
+          // Create two jagged arrays, one for men, one for women
+          men = new int[num][num+1];
+          women = new int[num][num+1];
 
 
+          //Read choices for men
+          System.out.println("Enter your choices for: ");
+          for (i = 0; i < num; i++) {
 
-      // Read choices for women
-      for (i = 0; i < num; i++) {
-          System.out.println("Woman " + i + ": ");
+              System.out.println("Man " + i + ": ");
 
-          for (j = 0; j < num; j++) {
-              choices = in.nextInt();
 
-              while (choices > num || choices < 0) {
-                System.out.println("Please enter a valid choice for Woman " + i + " between 0 and " + (num-1) + ": ");
-                choices = in.nextInt();
+              for (j = 0; j < num; j++) {
+                  choices = in.nextInt();
+
+                  while (choices > num || choices < 0) {
+                    System.out.println("Please enter a valid choice for Man " + i + " between 0 and " + (num-1) + ": ");
+                    choices = in.nextInt();
+                  }
+
+                  men[i][j+1] = choices;
               }
-              women[i][j+1] = choices;
+
+            }
+
+            System.out.println("\n");
+
+
+
+            // Read choices for women
+            for (i = 0; i < num; i++) {
+                System.out.println("Woman " + i + ": ");
+
+                for (j = 0; j < num; j++) {
+                    choices = in.nextInt();
+
+                    while (choices > num || choices < 0) {
+                      System.out.println("Please enter a valid choice for Woman " + i + " between 0 and " + (num-1) + ": ");
+                      choices = in.nextInt();
+                    }
+                    women[i][j+1] = choices;
+                }
+            }
+          } else {
+
+              System.out.println("write the method to read input from a file");
+              System.exit(0);
+
           }
-      }
 
       // Actual run the stable matching algorithm:
       //Marriage Algorithm
