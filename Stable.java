@@ -1,3 +1,9 @@
+/*
+ * Authors: Isaiah Mann, Kaylynn Crawford, Zoe Kendall
+ * Description: Java Implementation of Stable Marriage problem
+ * Adapted from: C++ code by Samia Qader
+ */
+
 import java.util.Scanner;
 
 class Stable {
