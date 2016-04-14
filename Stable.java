@@ -11,11 +11,11 @@ class Stable {
   public static void main (String[] args) {
       Scanner in = new Scanner(System.in);
 
-      // Create Input variables to hold number of men and women:
-      int choices =0, num=0, n =1, i, j;
+      // Create Input variables to hold numberOfEachGender ber of men and women:
+      int choices =0, numberOfEachGender =0, n =1, i, j;
       int [][] men = null, women = null;
+      
       // Print a nice intro the user user
-
       System.out.println("~~~~Welcome to the Marriage Algorithm Program~~~~");
       System.out.println("The rules for this program are as follows:");
       System.out.println("1. Enter the choices for each man/woman");
@@ -27,33 +27,35 @@ class Stable {
 
        if(args.length == 0) {
           // Not sure what this five thing is about, probably worth looking into
-          // Read in the number of men/women
+          // Read in the numberOfEachGender ber of men/women
           System.out.println("How many men/women ?");
-          num = in.nextInt();
-          while (num > 5) {
-             System.out.println("Please don't enter a number greater than 5");
-             System.out.println("Re-enter number:");
-             num = in.nextInt();
+          numberOfEachGender  = in.nextInt();
+          
+          // Ensure the numberOfEachGender ber is no greater than five
+          while (numberOfEachGender  > 5) {
+             System.out.println("Please don't enter a numberOfEachGender ber greater than 5");
+             System.out.println("Re-enter numberOfEachGender ber:");
+             numberOfEachGender  = in.nextInt();
           }
 
 
           // Create two jagged arrays, one for men, one for women
-          men = new int[num][num+1];
-          women = new int[num][num+1];
+          men = new int[numberOfEachGender ][numberOfEachGender +1];
+          women = new int[numberOfEachGender ][numberOfEachGender +1];
 
 
           //Read choices for men
           System.out.println("Enter your choices for: ");
-          for (i = 0; i < num; i++) {
+          for (i = 0; i < numberOfEachGender ; i++) {
 
               System.out.println("Man " + i + ": ");
 
 
-              for (j = 0; j < num; j++) {
+              for (j = 0; j < numberOfEachGender ; j++) {
                   choices = in.nextInt();
 
-                  while (choices >= num || choices < 0) {
-                    System.out.println("Please enter a valid choice for Man " + i + " between 0 and " + (num-1) + ": ");
+                  while (choices >= numberOfEachGender  || choices < 0) {
+                    System.out.println("Please enter a valid choice for Man " + i + " between 0 and " + (numberOfEachGender -1) + ": ");
                     choices = in.nextInt();
                   }
 
@@ -67,14 +69,14 @@ class Stable {
 
 
             // Read choices for women
-            for (i = 0; i < num; i++) {
+            for (i = 0; i < numberOfEachGender ; i++) {
                 System.out.println("Woman " + i + ": ");
 
-                for (j = 0; j < num; j++) {
+                for (j = 0; j < numberOfEachGender ; j++) {
                     choices = in.nextInt();
 
-                    while (choices >= num || choices < 0) {
-                      System.out.println("Please enter a valid choice for Woman " + i + " between 0 and " + (num-1) + ": ");
+                    while (choices >= numberOfEachGender  || choices < 0) {
+                      System.out.println("Please enter a valid choice for Woman " + i + " between 0 and " + (numberOfEachGender -1) + ": ");
                       choices = in.nextInt();
                     }
                     women[i][j+1] = choices;
@@ -87,23 +89,23 @@ class Stable {
 
           }
 
-      // Actual run the stable matching algorithm:
+      // Actually run the stable matching algorithm:
       //Marriage Algorithm
-      int man= -1, woman= -1, ugly_man = num + 1, temp;
+      int man= -1, woman= -1, ugly_man = numberOfEachGender  + 1, temp;
       int index_m = -1, index_w = -1;
-      int [] index_f = new int [num];
+      int [] index_f = new int [numberOfEachGender ];
       int couples = 0, indexer = 1;
 
-      for (i = 0; i < num; i++) {
+      for (i = 0; i < numberOfEachGender ; i++) {
           index_f[i] = ugly_man;
       }
 
-      while(couples < num) {
+      while(couples < numberOfEachGender ) {
 
          man = couples;
          while (man != ugly_man) {
            // used later
-           //woman = best choice on man's list
+           // woman = best choice on man's list
            while (woman == -1) {
               if (men[man][indexer]!= -1) {
                   index_w = indexer;
@@ -114,7 +116,7 @@ class Stable {
             }// end while woman
 
             // index of woman on man's list
-            for (i = 0; i <= num; i++) {
+            for (i = 0; i <= numberOfEachGender ; i++) {
                 if (women[woman][i]== man) {
                   index_m = i;
                 }
@@ -147,7 +149,7 @@ class Stable {
       }// end while couples
        // withdraw w from m's list
       //set the woman = -1 (no one)
-      //increment the number of couples
+      //increment the numberOfEachGender ber of couples
       System.out.println("\n\n");
 
       // Print out the reuslts:
