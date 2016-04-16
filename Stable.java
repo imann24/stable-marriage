@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 
 class Stable {
 
-  // Markers to denote when men and choicesOfWomen appear in the text file
+  // Markers to denote when men and women appear in the text file
   static final String menMarkerInFile = "M";
   static final String womenMarkerInFile = "W";
 

@@ -47,7 +47,7 @@ def read_in_choices_from_file (choices, file):
     while (bool(next_line = file.readLine())):
         # TODO: Finish implementing this function
         return
-        
+
 # Reading in Input:
 choices = 0
 numberOfEachGender = 0
