@@ -10,16 +10,16 @@ import java.io.FileNotFoundException;
 
 class Stable {
 
-  // Markers to denote when men and women appear in the text file
+  // Markers to denote when men and choicesOfWomen appear in the text file
   static final String menMarkerInFile = "M";
   static final String womenMarkerInFile = "W";
 
   public static void main (String[] args) {
       Scanner in = null;
 
-      // Create Input variables to hold numberOfEachGender ber of men and women:
+      // Create Input variables to hold numberOfEachGender ber of choicesOfMen and choicesOfWomen:
       int choices =0, numberOfEachGender =0, n =1, i, j;
-      int [][] men = null, women = null;
+      int [][] choicesOfMen = null, choicesOfWomen = null;
 
       // Print a nice intro the user user
       System.out.println("~~~~Welcome to the Marriage Algorithm Program~~~~");
@@ -35,25 +35,25 @@ class Stable {
          in = new Scanner(System.in);
 
           // Not sure what this five thing is about, probably worth looking into
-          // Read in the numberOfEachGender ber of men/women
+          // Read in the numberOfEachGender ber of choicesOfMen/choicesOfWomen
           System.out.println("How many men/women ?");
 
           numberOfEachGender = in.nextInt();
 
           // Ensure the numberOfEachGender ber is no greater than five
           while (numberOfEachGender  > 5) {
-             System.out.println("Please don't enter a numberOfEachGender ber greater than 5");
-             System.out.println("Re-enter numberOfEachGender ber:");
+             System.out.println("Please don't enter a number greater than 5");
+             System.out.println("Re-enter number:");
              numberOfEachGender  = in.nextInt();
           }
 
 
-          // Create two jagged arrays, one for men, one for women
-          men = new int[numberOfEachGender ][numberOfEachGender +1];
-          women = new int[numberOfEachGender ][numberOfEachGender +1];
+          // Create two jagged arrays, one for choicesOfMen, one for choicesOfWomen
+          choicesOfMen = new int[numberOfEachGender ][numberOfEachGender +1];
+          choicesOfWomen = new int[numberOfEachGender ][numberOfEachGender +1];
 
 
-          //Read choices for men
+          //Read choices for choicesOfMen
           System.out.println("Enter your choices for: ");
           for (i = 0; i < numberOfEachGender ; i++) {
 
@@ -68,7 +68,7 @@ class Stable {
                     choices = in.nextInt();
                   }
 
-                  men[i][j+1] = choices;
+                  choicesOfMen[i][j+1] = choices;
               }
 
             }
@@ -77,7 +77,7 @@ class Stable {
 
 
 
-            // Read choices for women
+            // Read choices for choicesOfWomen
             for (i = 0; i < numberOfEachGender ; i++) {
                 System.out.println("Woman " + i + ": ");
 
@@ -88,7 +88,7 @@ class Stable {
                       System.out.println("Please enter a valid choice for Woman " + i + " between 0 and " + (numberOfEachGender -1) + ": ");
                       choices = in.nextInt();
                     }
-                    women[i][j+1] = choices;
+                    choicesOfWomen[i][j+1] = choices;
                 }
             }
           } else {
@@ -102,17 +102,17 @@ class Stable {
 
               numberOfEachGender = Integer.parseInt(in.nextLine());
 
-              men = new int [numberOfEachGender][numberOfEachGender + 1];
-              women = new int [numberOfEachGender][numberOfEachGender + 1];
+              choicesOfMen = new int [numberOfEachGender][numberOfEachGender + 1];
+              choicesOfWomen = new int [numberOfEachGender][numberOfEachGender + 1];
 
               int[][] currentChoices = null;
 
               String marker = in.nextLine();
-              // Allows for arbitrary ordering: men or women can be first based off markers
+              // Allows for arbitrary ordering: choicesOfMen or choicesOfWomen can be first based off markers
               if (isWomenMarker(marker)) {
-                currentChoices = women;
+                currentChoices = choicesOfWomen;
               } else if (isMenMarker(marker)) {
-                currentChoices = men;
+                currentChoices = choicesOfMen;
               } else {
                 System.out.println("Invalid marker: " + marker + ". Exiting the program...");
                 System.exit(0);
@@ -121,9 +121,9 @@ class Stable {
               String proceedingLine = readInChoicesFromScanner(currentChoices, in);
 
               if (isWomenMarker(proceedingLine)) {
-                currentChoices = women;
+                currentChoices = choicesOfWomen;
               } else if (isMenMarker(proceedingLine)) {
-                currentChoices = men;
+                currentChoices = choicesOfMen;
               } else {
                 System.out.println("Invalid marker: " + proceedingLine + ". Exiting the program...");
                 System.exit(0);
@@ -150,9 +150,9 @@ class Stable {
            // used later
            // woman = best choice on man's list
            while (woman == -1) {
-              if (men[man][indexer]!= -1) {
+              if (choicesOfMen[man][indexer]!= -1) {
                   index_w = indexer;
-                  woman = men[man][indexer];
+                  woman = choicesOfMen[man][indexer];
               } else {
                   indexer++;
               }
@@ -160,7 +160,7 @@ class Stable {
 
             // index of woman on man's list
             for (i = 0; i <= numberOfEachGender ; i++) {
-                if (women[woman][i]== man) {
+                if (choicesOfWomen[woman][i]== man) {
                   index_m = i;
                 }
             }
@@ -174,13 +174,13 @@ class Stable {
                 if (index_m == ugly_man) {
                     man = ugly_man;  // man = ugly man
                 } else {
-                    man = women[woman][index_m];  // man = old fiance
+                    man = choicesOfWomen[woman][index_m];  // man = old fiance
                 }
 
             } // end if index_m
 
             if (man != ugly_man) {
-              men[man][index_w] = -1;
+              choicesOfMen[man][index_w] = -1;
             }
 
             woman = -1;
@@ -198,11 +198,11 @@ class Stable {
       // Print out the reuslts:
       System.out.println("~~~~~~~~RESULTS~~~~~~~~");
       for (i = 0; i < couples; i++) {
-        System.out.println("Couple " + (i+1) + ": Man " + women[i][index_f[i]] + " & Woman " + i + "\n");
+        System.out.println("Couple " + (i+1) + ": Man " + choicesOfWomen[i][index_f[i]] + " & Woman " + i + "\n");
       }//end main */
   }
 
-  // Returns the last line it reads in (presumably a marker for men or women)
+  // Returns the last line it reads in (presumably a marker for choicesOfMen or choicesOfWomen)
   static String readInChoicesFromScanner (int[][] choices, Scanner scanner) {
       String nextLine = "";
       int personIndex = 0;
