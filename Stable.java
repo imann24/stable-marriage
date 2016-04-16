@@ -5,16 +5,22 @@
  */
 
 import java.util.Scanner;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
 
 class Stable {
 
+  // Markers to denote when men and women appear in the text file
+  static final String menMarkerInFile = "M";
+  static final String womenMarkerInFile = "W";
+
   public static void main (String[] args) {
-      Scanner in = new Scanner(System.in);
+      Scanner in = null;
 
       // Create Input variables to hold numberOfEachGender ber of men and women:
       int choices =0, numberOfEachGender =0, n =1, i, j;
       int [][] men = null, women = null;
-      
+
       // Print a nice intro the user user
       System.out.println("~~~~Welcome to the Marriage Algorithm Program~~~~");
       System.out.println("The rules for this program are as follows:");
@@ -26,11 +32,14 @@ class Stable {
       System.out.println("4. Complete each Rank ordered List (ROL)\n\n");
 
        if(args.length == 0) {
+         in = new Scanner(System.in);
+
           // Not sure what this five thing is about, probably worth looking into
           // Read in the numberOfEachGender ber of men/women
           System.out.println("How many men/women ?");
-          numberOfEachGender  = in.nextInt();
-          
+
+          numberOfEachGender = in.nextInt();
+
           // Ensure the numberOfEachGender ber is no greater than five
           while (numberOfEachGender  > 5) {
              System.out.println("Please don't enter a numberOfEachGender ber greater than 5");
@@ -84,9 +93,43 @@ class Stable {
             }
           } else {
 
-              System.out.println("write the method to read input from a file");
-              System.exit(0);
+              try {
+                in = new Scanner(new FileReader(args[0]));
+              } catch (FileNotFoundException e) {
+                System.out.println("File: " + args[0] + " not found. Exiting program...");
+                System.exit(0);
+              }
 
+              numberOfEachGender = Integer.parseInt(in.nextLine());
+
+              men = new int [numberOfEachGender][numberOfEachGender + 1];
+              women = new int [numberOfEachGender][numberOfEachGender + 1];
+
+              int[][] currentChoices = null;
+
+              String marker = in.nextLine();
+              // Allows for arbitrary ordering: men or women can be first based off markers
+              if (isWomenMarker(marker)) {
+                currentChoices = women;
+              } else if (isMenMarker(marker)) {
+                currentChoices = men;
+              } else {
+                System.out.println("Invalid marker: " + marker + ". Exiting the program...");
+                System.exit(0);
+              }
+
+              String proceedingLine = readInChoicesFromScanner(currentChoices, in);
+
+              if (isWomenMarker(proceedingLine)) {
+                currentChoices = women;
+              } else if (isMenMarker(proceedingLine)) {
+                currentChoices = men;
+              } else {
+                System.out.println("Invalid marker: " + proceedingLine + ". Exiting the program...");
+                System.exit(0);
+              }
+
+              readInChoicesFromScanner(currentChoices, in);
           }
 
       // Actually run the stable matching algorithm:
@@ -157,5 +200,46 @@ class Stable {
       for (i = 0; i < couples; i++) {
         System.out.println("Couple " + (i+1) + ": Man " + women[i][index_f[i]] + " & Woman " + i + "\n");
       }//end main */
+  }
+
+  // Returns the last line it reads in (presumably a marker for men or women)
+  static String readInChoicesFromScanner (int[][] choices, Scanner scanner) {
+      String nextLine = "";
+      int personIndex = 0;
+      while (scanner.hasNextLine() && !isMarker(nextLine = scanner.nextLine())) {
+
+        choices[personIndex] = readInChoicesFromLine(nextLine);
+
+        personIndex++;
+
+      }
+
+      return nextLine;
+  }
+
+  static int[] readInChoicesFromLine (String commaSeparatedLine) {
+    String[] choicesAsString = commaSeparatedLine.split(",");
+
+    // Allow for an offset of one to match the current style
+    int[] choices = new int [choicesAsString.length + 1];
+
+    for (int i = 0; i < choicesAsString.length; i++) {
+      choices[i + 1] = Integer.parseInt(choicesAsString[i]);
+    }
+
+    return choices;
+
+  }
+
+  static boolean isWomenMarker (String marker) {
+    return (marker.equals(womenMarkerInFile));
+  }
+
+  static boolean isMenMarker (String marker) {
+    return (marker.equals(menMarkerInFile));
+  }
+
+  static boolean isMarker (String marker) {
+    return isMenMarker(marker) || isWomenMarker(marker);
   }
 }
