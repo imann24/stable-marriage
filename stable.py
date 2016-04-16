@@ -18,14 +18,46 @@ def next_int (message = None):
         return int(input(message))
 
 def read_int_from_file (file):
-    return int(file.nextLine())
+    return int(file.readLine())
 
+def is_women_marker (marker):
+    return marker == women_marker_in_file
+
+def is_men_marker (marker):
+    return marker == men_marker_in_file
+
+def is_marker (marker):
+    return (is_women_marker(marker) or
+            is_men_marker(marker))
+
+def read_in_choices_from_line (comma_separated_line):
+    choices_as_string = comma_separated_line.split(",")
+
+    choices = [i for i in range(choices_as_string.length + 1)]
+
+    for i in range(0, choices_as_string.length):
+        choices[i + 1] = int(choices_as_string[i])
+
+    return choices;
+
+def read_in_choices_from_file (choices, file):
+    next_line = ""
+    person_index = 0
+
+    while (bool(next_line = file.readLine())):
+        # TODO: Finish implementing this function
+        return
+        
 # Reading in Input:
 choices = 0
 numberOfEachGender = 0
 n = 0
 i = 0
 j = 0
+
+# Markers to denote when men and women appear in the text file
+men_marker_in_file = "M";
+women_marker_in_file = "W";
 
 print("~~~~Welcome to the Marriage Algorithm Program~~~~")
 print("The rules for this program are as follows:")
@@ -73,6 +105,21 @@ else:
     inputFile = open(sys.argv[1], 'r')
 
     numberOfEachGender = read_int_from_file(inputFile)
+
+    choicesOfWomen = create_2d_int_array(
+        numberOfEachGender,
+        numberOfEachGender + 1
+    )
+
+    choicesOfMen = create_2d_int_array(
+        numberOfEachGender,
+        numberOfEachGender + 1
+    )
+
+    currentChoices = None
+
+    marker = inputFile.readLine()
+
 
     print ("Not Yet fully implemented: Reading input from a file.\nExiting...")
     sys.exit(0)
