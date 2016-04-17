@@ -132,74 +132,106 @@ class Stable {
               readInChoicesFromScanner(currentChoices, in);
           }
 
+      int[][] proposers = null;
+      int[][] acceptors = null;
+
+      System.out.println("Who should propose:");
+      System.out.println("1). The Women?");
+      System.out.println("2). The Men?");
+      in = new Scanner(System.in);
+
+      int proposerChoice = in.nextInt();
+
+      while (proposerChoice != 1 && proposerChoice != 2) {
+        System.out.println("Please enter a valid number (1 or 2)");
+        proposerChoice = in.nextInt();
+      }
+
+      if (proposerChoice == 1) {
+        proposers = choicesOfWomen;
+        acceptors = choicesOfMen;
+      } else if (proposerChoice == 2) {
+        proposers = choicesOfMen;
+        acceptors = choicesOfWomen;
+      }
+
+
       // Actually run the stable matching algorithm:
       //Marriage Algorithm
-      int man= -1, woman= -1, ugly_man = numberOfEachGender  + 1, temp;
-      int index_m = -1, index_w = -1;
-      int [] index_f = new int [numberOfEachGender ];
+      int proposer= -1, acceptor= -1, uglyProposer = numberOfEachGender  + 1, temp;
+      int indexOfProposer = -1, indexOfAcceptor = -1;
+      int [] indexesOfAcceptors = new int [numberOfEachGender];
       int couples = 0, indexer = 1;
 
       for (i = 0; i < numberOfEachGender ; i++) {
-          index_f[i] = ugly_man;
+          indexesOfAcceptors[i] = uglyProposer;
       }
 
       while(couples < numberOfEachGender ) {
 
-         man = couples;
-         while (man != ugly_man) {
+         proposer = couples;
+         while (proposer != uglyProposer) {
            // used later
-           // woman = best choice on man's list
-           while (woman == -1) {
-              if (choicesOfMen[man][indexer]!= -1) {
-                  index_w = indexer;
-                  woman = choicesOfMen[man][indexer];
+           // acceptor = best choice on proposer's list
+           while (acceptor == -1) {
+              if (proposers[proposer][indexer]!= -1) {
+                  indexOfAcceptor = indexer;
+                  acceptor = proposers[proposer][indexer];
               } else {
                   indexer++;
               }
-            }// end while woman
+            }// end while acceptor
 
-            // index of woman on man's list
+            // index of acceptor on proposer's list
             for (i = 0; i <= numberOfEachGender ; i++) {
-                if (choicesOfWomen[woman][i]== man) {
-                  index_m = i;
+                if (acceptors[acceptor][i]== proposer) {
+                  indexOfProposer = i;
                 }
             }
 
-            // if woman prefers man to her fiance
-            if (index_m < index_f[woman]) {
-                temp = index_f[woman]; // temp = old fiance
-                index_f[woman] = index_m; // fiance = new man
-                index_m = temp; // man = old fiance
+            // if acceptor prefers proposer to her fiance
+            if (indexOfProposer < indexesOfAcceptors[acceptor]) {
+                temp = indexesOfAcceptors[acceptor]; // temp = old fiance
+                indexesOfAcceptors[acceptor] = indexOfProposer; // fiance = new proposer
+                indexOfProposer = temp; // proposer = old fiance
 
-                if (index_m == ugly_man) {
-                    man = ugly_man;  // man = ugly man
+                if (indexOfProposer == uglyProposer) {
+                    proposer = uglyProposer;  // proposer = ugly proposer
                 } else {
-                    man = choicesOfWomen[woman][index_m];  // man = old fiance
+                    proposer = acceptors[acceptor][indexOfProposer];  // proposer = old fiance
                 }
 
-            } // end if index_m
+            } // end if indexOfProposer
 
-            if (man != ugly_man) {
-              choicesOfMen[man][index_w] = -1;
+            if (proposer != uglyProposer) {
+              proposers[proposer][indexOfAcceptor] = -1;
             }
 
-            woman = -1;
+            acceptor = -1;
             indexer = 1;
-         }// end while index_m
+         }// end while indexOfProposer
 
        couples++;
 
       }// end while couples
        // withdraw w from m's list
-      //set the woman = -1 (no one)
+      //set the acceptor = -1 (no one)
       //increment the numberOfEachGender ber of couples
       System.out.println("\n\n");
 
       // Print out the reuslts:
       System.out.println("~~~~~~~~RESULTS~~~~~~~~");
-      for (i = 0; i < couples; i++) {
-        System.out.println("Couple " + (i+1) + ": Man " + choicesOfWomen[i][index_f[i]] + " & Woman " + i + "\n");
-      }//end main */
+      if (proposerChoice == 1) {
+        for (i = 0; i < couples; i++) {
+          System.out.println("Couple " + (i+1) + ": Woman " + choicesOfMen[i][indexesOfAcceptors[i]] + " & Man " + i + "\n");
+        }
+      } else if (proposerChoice == 2) {
+        for (i = 0; i < couples; i++) {
+          System.out.println("Couple " + (i+1) + ": Man " + choicesOfWomen[i][indexesOfAcceptors[i]] + " & Woman " + i + "\n");
+        }
+      }
+
+      //end main
   }
 
   // Returns the last line it reads in (presumably a marker for choicesOfMen or choicesOfWomen)
