@@ -150,56 +150,80 @@ else:
 
     read_in_choices_from_file(current_choices, input_lines)
 
+proposers = None
+acceptors = None
+
+print ("Who should propose:")
+print ("1). The Women?")
+print("2). The Men?")
+proposer_choice = next_int()
+
+while (proposer_choice != 1 and proposer_choice != 2):
+    print("Please enter a valid number (1 or 2)")
+    proposer_choice = next_int()
+
+if (proposer_choice == 1):
+    proposers = choices_of_women
+    acceptors = choices_of_men
+elif(proposer_choice == 2):
+    proposers = choices_of_men
+    acceptors = choices_of_women
+
 #  Run Stable Marriage Algorithm:
-man = -1
-woman = -1
-ugly_man = numberOfEachGender + 1
+current_proposer = -1
+current_acceptor = -1
+ugly_proposer = numberOfEachGender + 1
 temp = 0
-index_m = -1
-index_w = -1
+index_of_proposer = -1
+index_of_acceptor = -1
 #Initializer adapated from: http://stackoverflow.com/questions/521674/initializing-a-list-to-a-known-numberOfEachGenderber-of-elements-in-python
-index_f = [0] * numberOfEachGender
+indexes_of_acceptors = [0] * numberOfEachGender
 couples = 0
 indexer = 1
 
+
 for i in range (0, numberOfEachGender):
-    index_f[i] = ugly_man
+    indexes_of_acceptors[i] = ugly_proposer
 
 while (couples < numberOfEachGender):
 
-    man = couples
-    while (man != ugly_man):
+    current_proposer = couples
+    while (current_proposer != ugly_proposer):
 
-        while (woman == -1):
-            if (choices_of_men[man][indexer] != -1):
-                index_w = indexer
-                woman = choices_of_men[man][indexer]
+        while (current_acceptor == -1):
+            if (proposers[current_proposer][indexer] != -1):
+                index_of_acceptor = indexer
+                current_acceptor = proposers[current_proposer][indexer]
             else:
                 indexer += 1
 
         for i in range(0, numberOfEachGender+1):
-            if (choices_of_women[woman][i] == man):
-                index_m = i
+            if (acceptors[current_acceptor][i] == current_proposer):
+                index_of_proposer = i
 
-        if (index_m < index_f[woman]):
-            temp = index_f[woman]
-            index_f[woman] = index_m
-            index_m = temp
+        if (index_of_proposer < indexes_of_acceptors[current_acceptor]):
+            temp = indexes_of_acceptors[current_acceptor]
+            indexes_of_acceptors[current_acceptor] = index_of_proposer
+            index_of_proposer = temp
 
-            if (index_m == ugly_man):
-                man = ugly_man
+            if (index_of_proposer == ugly_proposer):
+                current_proposer = ugly_proposer
             else:
-                man = choices_of_women[woman][index_m]
+                current_proposer = acceptors[current_acceptor][index_of_proposer]
 
-        if (man != ugly_man):
-            choices_of_men[man][index_w] = -1
+        if (current_proposer != ugly_proposer):
+            proposers[current_proposer][index_of_acceptor] = -1
 
-        woman = -1
+        current_acceptor = -1
         indexer = 1
 
     couples += 1
 print("\n\n")
 #       // Print out the reuslts:
 print("~~~~~~~~RESULTS~~~~~~~~")
-for count in range(0, couples):
-    print("Couple " + str(count+1) + ": Man " + str(choices_of_women[count][index_f[count]]) + " & Woman " + str(count) + "\n")
+if (proposer_choice == 1):
+    for count in range(0, couples):
+        print("Couple " + str(count+1) + ": Woman " + str(choices_of_men[count][indexes_of_acceptors[count]]) + " & Man " + str(count) + "\n")
+elif(proposer_choice == 2):
+    for count in range(0, couples):
+        print("Couple " + str(count+1) + ": Man " + str(choices_of_women[count][indexes_of_acceptors[count]]) + " & Woman " + str(count) + "\n")
