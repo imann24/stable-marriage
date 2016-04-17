@@ -17,8 +17,8 @@ def next_int (message = None):
     else:
         return int(input(message))
 
-def read_int_from_file (file):
-    return int(file.readLine())
+def read_int_from_file (inputFile):
+    return int(inputFile.readLine())
 
 def is_women_marker (marker):
     return marker == women_marker_in_file
@@ -33,20 +33,26 @@ def is_marker (marker):
 def read_in_choices_from_line (comma_separated_line):
     choices_as_string = comma_separated_line.split(",")
 
-    choices = [i for i in range(choices_as_string.length + 1)]
+    choices = [i for i in range(len(choices_as_string) + 1)]
 
-    for i in range(0, choices_as_string.length):
+    for i in range(0, len(choices_as_string)):
         choices[i + 1] = int(choices_as_string[i])
 
     return choices;
 
-def read_in_choices_from_file (choices, file):
+def read_in_choices_from_file (choices, inputFile):
     next_line = ""
     person_index = 0
 
-    while (bool(next_line = file.readLine())):
-        # TODO: Finish implementing this function
-        return
+    next_line = inputFile.pop(0)
+    while (bool(next_line) and not is_marker(next_line)):
+        choices[person_index] = read_in_choices_from_line(next_line)
+
+        person_index += 1
+        next_line = inputFile.pop(0)
+
+    return next_line
+
 
 # Reading in Input:
 choices = 0
@@ -76,8 +82,8 @@ if(len(sys.argv) <= 1):
         print("Please don't enter a number greater than 5")
         numberOfEachGender = next_int("Re-enter number:\n")
 
-    choicesOfMen = create_2d_int_array(numberOfEachGender, numberOfEachGender+1)
-    choicesOfWomen = create_2d_int_array(numberOfEachGender, numberOfEachGender+1)
+    choices_of_men = create_2d_int_array(numberOfEachGender, numberOfEachGender+1)
+    choices_of_women = create_2d_int_array(numberOfEachGender, numberOfEachGender+1)
 
     for i in range (0, numberOfEachGender):
         print ("Man " + str(i) + ": ")
@@ -88,7 +94,7 @@ if(len(sys.argv) <= 1):
             while (choices >= numberOfEachGender or choices < 0):
                 print("Please enter a valid choice for Man " + str(i) + " between 0 and " + str(numberOfEachGender-1) + ": ")
                 choices = next_int()
-            choicesOfMen[i][j+1] = choices
+            choices_of_men[i][j+1] = choices
 
     for i in range (0, numberOfEachGender):
         print ("Woman " + str(i) + ": ")
@@ -99,30 +105,50 @@ if(len(sys.argv) <= 1):
             while (choices >= numberOfEachGender or choices < 0):
                 print("Please enter a valid choice for Woman " + str(i) + " between 0 and " + str(numberOfEachGender-1) + ": ")
                 choices = next_int()
-            choicesOfWomen[i][j+1] = choices
+            choices_of_women[i][j+1] = choices
 else:
     # Opens the input file in read mode
-    inputFile = open(sys.argv[1], 'r')
+    input_file = open(sys.argv[1], 'r')
 
-    numberOfEachGender = read_int_from_file(inputFile)
+    input_text = input_file.read()
 
-    choicesOfWomen = create_2d_int_array(
+    input_lines = input_text.split("\n")
+
+    numberOfEachGender = int(input_lines.pop(0))
+
+    choices_of_women = create_2d_int_array(
         numberOfEachGender,
         numberOfEachGender + 1
     )
 
-    choicesOfMen = create_2d_int_array(
+    choices_of_men = create_2d_int_array(
         numberOfEachGender,
         numberOfEachGender + 1
     )
 
-    currentChoices = None
+    current_choices = None
 
-    marker = inputFile.readLine()
+    marker = input_lines.pop(0)
 
+    if (is_women_marker(marker)):
+        current_choices = choices_of_women
+    elif (is_men_marker(marker)):
+        current_choices = choices_of_men
+    else:
+        print("Invalid Marker: " + marker + ". Exiting program...")
+        sys.exit(0)
 
-    print ("Not Yet fully implemented: Reading input from a file.\nExiting...")
-    sys.exit(0)
+    marker = read_in_choices_from_file(current_choices, input_lines)
+
+    if (is_women_marker(marker)):
+        current_choices = choices_of_women
+    elif (is_men_marker(marker)):
+        current_choices = choices_of_men
+    else:
+        print("Invalid Marker: " + marker + ". Exiting program...")
+        sys.exit(0)
+
+    read_in_choices_from_file(current_choices, input_lines)
 
 #  Run Stable Marriage Algorithm:
 man = -1
@@ -145,15 +171,14 @@ while (couples < numberOfEachGender):
     while (man != ugly_man):
 
         while (woman == -1):
-            print(str(man) + " " + str(indexer))
-            if (choicesOfMen[man][indexer] != -1):
+            if (choices_of_men[man][indexer] != -1):
                 index_w = indexer
-                woman = choicesOfMen[man][indexer]
+                woman = choices_of_men[man][indexer]
             else:
                 indexer += 1
 
         for i in range(0, numberOfEachGender+1):
-            if (choicesOfWomen[woman][i] == man):
+            if (choices_of_women[woman][i] == man):
                 index_m = i
 
         if (index_m < index_f[woman]):
@@ -164,10 +189,10 @@ while (couples < numberOfEachGender):
             if (index_m == ugly_man):
                 man = ugly_man
             else:
-                man = choicesOfWomen[woman][index_m]
+                man = choices_of_women[woman][index_m]
 
         if (man != ugly_man):
-            choicesOfMen[man][index_w] = -1
+            choices_of_men[man][index_w] = -1
 
         woman = -1
         indexer = 1
@@ -177,4 +202,4 @@ print("\n\n")
 #       // Print out the reuslts:
 print("~~~~~~~~RESULTS~~~~~~~~")
 for count in range(0, couples):
-    print("Couple " + str(count+1) + ": Man " + str(choicesOfWomen[count][index_f[count]]) + " & Woman " + str(count) + "\n")
+    print("Couple " + str(count+1) + ": Man " + str(choices_of_women[count][index_f[count]]) + " & Woman " + str(count) + "\n")
